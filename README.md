@@ -14,7 +14,8 @@ Open in your browser http://localhost:8000
 A form will be displayed, with some instructions about how to input data and the format.
 You can input data manually in the TextField or upload a file.
 
-After submit, it will show you the Valid or Invalid information in the order of the credit card numbers where inserted on the text file or in the text field.
+After submit, the application will output if the given card number is Valid or Invalid.
+It will check in the same order as the file uploaded or in the order of the text in the TextField.
 
 To run tests: `python manage.py test`
 
