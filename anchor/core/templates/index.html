@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+{% load static material_form %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ABCD Bank</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <h3 class="text-muted">ABCD Bank - Credit Card Validator</h3>
+        <p>
+          To validate your credit card list you can one card number per line in the form "credit card list" field, or upload a txt file.
+          <br />
+          The format is the same to both methods as described bellow:
+          {% if not messages %}
+          <hr>
+<pre>
+6
+4123456789123456
+5123-4567-8912-3456
+61234-567-8912-3456
+4123356789123456
+5133-3367-8912-3456
+5123 - 3567 - 8912 - 3456
+</pre>
+          {% endif %}
+          <hr>
+
+          {% if messages %}
+            <div>
+              <h4>Result:</h4>
+                <ul>
+                    {% for message in messages %}
+                      {% if message|stringformat:"s" == "Valid" %}
+                        <li class="alert alert-success">{{ message }}</li>
+                      {% else %}
+                        <li class="alert alert-danger">{{ message }}</li>
+                      {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="jumbotron">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% form form=form %}
+            {% endform %}
+            <br />
+            <button type="submit" name="_submit" class="btn">Submit</button>
+        </form>
+      </div>
+      </div> <!-- /container -->
+
+    {% include 'material/includes/material_css.html' %}
+    <script src="{% static 'material/js/jquery-2.2.0.js' %}"></script>
+    {% include 'material/includes/material_js.html' %}
+    </script>
+  </body>
+</html>

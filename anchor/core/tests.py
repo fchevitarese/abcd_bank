@@ -1,8 +1,12 @@
-from django.test import TestCase
-from .helpers import check_valid
+from django.test import TestCase, Client
+from django.core.urlresolvers import reverse
+
+from .helpers import CreditCard
 
 
 class TestCardValider(TestCase):
+    def setUp(self):
+        self.client = Client()
 
     def test_first_line_between_1_and_100(self):
         """First line should be greater > 0 and <= 100."""
@@ -23,9 +27,12 @@ class TestCardValider(TestCase):
             '5122-2368-7954 - 3214',
             '44244x4424442444',
             '0525362587961578',
+            '5133_3167_8912_3456',
+            '5133.3167.8912.3456',
         ]
         for invalid in invalids:
-            self.assertEqual('Invalid', check_valid(invalid))
+            card = CreditCard(invalid)
+            self.assertEqual(card.check_valid(), 'Invalid')
 
     def test_valid(self):
         """Should receive Valid to all numbers in the list."""
@@ -37,4 +44,15 @@ class TestCardValider(TestCase):
             '4123356789123456',
         ]
         for valid in valids:
-            self.assertEqual('Valid', check_valid(valid))
+            card = CreditCard(valid)
+            self.assertEqual(card.check_valid(), 'Valid')
+
+    def test_index(self):
+        """Should find index path."""
+        resp = self.client.get(reverse('index'))
+        self.assertEqual(resp.status_code, 200)
+
+    def test_index_template(self):
+        """Should use template index.html."""
+        with self.assertTemplateUsed('index.html'):
+            self.client.get(reverse('index'))
